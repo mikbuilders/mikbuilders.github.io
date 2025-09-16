@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIK Builders Real Estate</title>
+  <!-- Fancybox CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
+  <style>
+    /* -------------------------
+       BASIC STYLES
+    --------------------------*/
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+    body {
+      background-image: url('banner1.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #222;
+      line-height: 1.6;
+    }
+    a{text-decoration:none;color:inherit;}
+    img{max-width:100%;border-radius:6px;}
+
+    /* -------------------------
+       HEADER & NAV
+    --------------------------*/
+    header{
+      background:#ffffffdd;
+      backdrop-filter:blur(4px);
+      padding:12px 20px;
+      position:sticky;top:0;z-index:1000;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+    }
+    nav{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav .brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    nav ul{
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    /* -------------------------
+       SEARCH BAR (Sticky)
+    --------------------------*/
+    .search-bar {
+  display: none;  /* শুরুতে লুকানো থাকবে */
+  background:#ffffffdd;
+  backdrop-filter:blur(4px);
+  padding:10px;
+  justify-content:center;
+  gap:10px;
+  position:sticky;
+  top:60px;
+  z-index:900;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+.search-bar.active {
+  display: flex; /* toggle করলে আবার flex হবে */
+}
+    .search-bar input,.search-bar select,.search-bar button{
+      padding:8px 10px;
+      border:1px solid #ccc;
+      border-radius:4px;
+    }
+    .search-bar button{background:#0077cc;color:white;border:none;cursor:pointer;}
+
+    /* -------------------------
+       PROJECTS GRID
+    --------------------------*/
+    #projects{
+      padding:20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+      gap:20px;
+    }
+    .card{
+      background:#fff;
+      padding:10px;
+      border-radius:8px;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+      cursor:pointer;
+      transition:transform .2s;
+    }
+    .card:hover{transform:scale(1.03);}
+    .card h3{margin:10px 0;color:#0077cc;}
+
+
+
+    /* -------------------------
+       ABOUT US PAGE
+    --------------------------*/
+    #about{display:none;padding:20px;background:#fff;margin:20px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+
+    /* -------------------------
+       SOCIAL ICONS (Sticky Right)
+    --------------------------*/
+    .social-icons{
+      position:fixed;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+      z-index:1000;
+    }
+    .social-icons a{
+      width:40px;height:40px;
+      display:flex;align-items:center;justify-content:center;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 2px 6px rgba(0,0,0,.2);
+      transition:transform .2s;
+    }
+    .social-icons a:hover{transform:scale(1.1);}
+    .social-icons svg{width:22px;height:22px;}
+
+    /* -------------------------
+       FOOTER
+    --------------------------*/
+    footer{
+      background:#ffffffdd;
+      backdrop-filter:blur(4px);
+      padding:20px;
+      text-align:center;
+      margin-top:20px;
+      box-shadow:0 -2px 6px rgba(0,0,0,.15);
+    }
+
+    .slider{
+      position: relative;
+    }
+    .slider img{
+      width: 100%;
+      border-radius: 6px;
+    }
+    .slide-img{
+      transition: transform 0.3s ease;
+    }
+
+    .slider .prev, .slider .next{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+      background: rgba(0,0,0,0.4);
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .slider .prev{ left: 5px; }
+    .slider .next{ right: 5px; }
+     /* -------------------------
+   PROJECT DETAILS (Updated)
+--------------------------*/
+#details {
+  text-align: center;
+  display: none;
+  padding: 20px;
+  background: #fff;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  max-width: 800px;
+}
+
+#details.active {
+  display: block;
+}
+
+#details .detail-header {
+  margin-bottom: 15px;
+}
+
+#details h2 {
+  margin-bottom: 8px;
+  font-size: 26px;
+  color: #0077cc;
+}
+
+#details p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.detail-gallery {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.detail-gallery img {
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.detail-footer {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+/* -------------------------
+   PROJECT DETAILS GALLERY IMAGE SIZE
+--------------------------*/
+#details .gallery img {
+  width: auto;       /* auto width */
+  max-width: 500px;  /* desktop view-এ max width */
+  height: auto;      /* proportionate height */
+  display: block;
+  margin: 10px auto; /* centered with spacing */
+  border-radius: 8px;
+}
+
+/* Slide image in project card (bigger view) */
+#details .slide-img {
+  max-width: 90%;    /* max width of main image */
+  height: auto;
+  margin: 0 auto 20px auto;
+  display: block;
+  border-radius: 8px;
+}
+/* -------------------------
+   PROJECT DETAILS CENTERED (Desktop + Mobile)
+--------------------------*/
+#details {
+  display: none;            /* আগে hidden থাকে */
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  padding: 20px;
+  width: 95%;               /* mobile view-এ nearly full width */
+  max-width: 800px;         /* desktop view-এ max width */
+  margin: 20px auto;        /* left-right auto -> centered */
+}
+
+#details.active {
+  display: block;           /* toggle হলে visible হবে */
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  #details {
+    width: 95%;             /* mobile screen nearly full width */
+    padding: 15px;
+    margin: 15px auto;
+  }
+  .gallery img {
+    width: 100px;           /* smaller images in gallery for mobile */
+  }
+}
+
+/* Desktop tweaks */
+@media (min-width: 769px) {
+  .gallery img {
+    width: 150px;           /* bigger images for desktop */
+  }
+}
+
+
+    /* -------------------------
+       MOBILE RESPONSIVE
+    --------------------------*/
+    @media (max-width: 768px) {
+      nav {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      nav .brand h1 {
+        font-size: 18px;
+        white-space: nowrap;
+      }
+      nav ul {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px;
+  }
+      .search-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .search-bar input, .search-bar select, .search-bar button {
+        width: 100%;
+      }
+      #projects {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        padding: 10px;
+      }
+      .gallery img { width: 100px; }
+      .slider .prev, .slider .next { font-size: 28px; padding: 8px 12px; }
+
+    }
+
+
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <div class="brand">
+        <img src="logo3.png" alt="MIK Builders Logo" style="height:40px;">
+        <h1>MIK Builders</h1>
+      </div>
+      <ul>
+  <li><a href="#home">Home</a></li>
+  <li><a href="#about">About Us</a></li>
+  <li><button id="toggle-search" style="background:none;border:none;font-size:18px;cursor:pointer;">🔍</button></li>
+</ul>
+
+    </nav>
+  </header>
+
+  <!-- SEARCH BAR -->
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search property...">
+    <select id="location"></select>
+    <select id="price">
+      <option value="">Price</option>
+      <option value="low">Below 50L</option>
+      <option value="mid">50L - 1Cr</option>
+      <option value="high">Above 1Cr</option>
+    </select>
+    <button id="apply">Apply</button>
+  </div>
+
+
+
+  <!-- PROJECT DETAILS -->
+  <div id="details"></div>
+
+  <!-- PROJECTS -->
+  <div id="projects"></div>
+
+  <!-- ABOUT US -->
+  <div id="about">
+    <h2>About Us</h2>
+    <p>আমরা MIK Builders – একটি নির্ভরযোগ্য রিয়েল এস্টেট কোম্পানি। আমরা জমি, ফ্ল্যাট ও প্লট বিক্রয় ও ডেভেলপমেন্ট করে থাকি। আমাদের লক্ষ্য হলো গ্রাহকদের জন্য সেরা সুযোগ তৈরি করা।</p>
+  </div>
+
+  <!-- SOCIAL ICONS (Sticky Right) -->
+  <div class="social-icons">
+    <a href="https://wa.me/8801972419224" target="_blank" title="WhatsApp">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="#25D366" viewBox="0 0 24 24"><path d="M20.52 3.48A11.93 11.93 0 0012 0C5.37 0 0 5.37 0 12c0 2.12.55 4.2 1.59 6.05L0 24l6.17-1.62A11.94 11.94 0 0012 24c6.63 0 12-5.37 12-12 0-3.19-1.24-6.19-3.48-8.52zM12 22a9.93 9.93 0 01-5.06-1.36l-.36-.21-3.65.96.97-3.55-.24-.37A9.93 9.93 0 012 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.13-7.4c-.28-.14-1.66-.82-1.92-.91-.26-.1-.45-.14-.64.14-.19.28-.73.91-.9 1.1-.17.19-.34.21-.62.07-.28-.14-1.18-.43-2.25-1.38-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.12-.12.28-.31.43-.47.14-.16.19-.28.28-.47.09-.19.05-.36-.02-.5-.07-.14-.64-1.54-.88-2.11-.23-.55-.47-.48-.64-.49h-.55c-.19 0-.5.07-.76.36-.26.28-1 1-1 2.43s1.02 2.82 1.16 3.01c.14.19 2 3.05 4.85 4.28.68.29 1.21.46 1.62.59.68.22 1.3.19 1.79.12.55-.08 1.66-.68 1.9-1.33.24-.65.24-1.2.17-1.33-.07-.13-.26-.21-.55-.35z"/></svg>
+    </a>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mikbuilders.mail@gmail.com" target="_blank">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="#D44638" viewBox="0 0 24 24"><path d="M12 12.713l11.985-7.713A1 1 0 0023 4H1a1 1 0 00-.985 1l11.985 7.713zM12 14.713l-12-7.713V19a1 1 0 001 1h22a1 1 0 001-1V7l-12 7.713z"/></svg>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61580302139073#" target="_blank" title="Facebook">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="#1877F2" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692V11.01h3.128V8.309c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.796.143v3.24h-1.918c-1.507 0-1.798.717-1.798 1.768v2.318h3.595l-.468 3.696h-3.127V24h6.127C23.403 24 24 23.403 24 22.674V1.326C24 .597 23.403 0 22.675 0z"/></svg>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>About:</strong> আমরা নির্ভরযোগ্য রিয়েল এস্টেট সলিউশন দিয়ে থাকি।</p>
+    <p><strong>Contact:</strong> WhatsApp: 01972419224 | Email: mikbuilders.mail@gmail.com</p>
+    <p>&copy; <span id="year"></span> MIK Builders</p>
+  </footer>
+
+  <script>
+    const PROPERTIES=[
+  {
+    id:1,
+    title:"Luxury Flat in Dhaka",
+    price:"85L", priceValue:85,
+    location:"Dhaka",
+    description:"A modern luxury flat located in the heart of Dhaka. Spacious living rooms, premium fittings, 24/7 security and rooftop garden make it an ideal home for families who value both comfort and lifestyle.",
+    imgs:["https://picsum.photos/400/250?random=101","https://picsum.photos/400/250?random=111","https://picsum.photos/400/250?random=121"]
+  },
+  {
+    id:2,
+    title:"Plot near Gulshan",
+    price:"1.2Cr", priceValue:120,
+    location:"Dhaka",
+    description:"Prime residential plot located close to Gulshan. Surrounded by upscale neighborhoods, wide roads and easy access to schools, hospitals and shopping centers. A perfect spot for building your dream home or investment property.",
+    imgs:["https://picsum.photos/400/250?random=102","https://picsum.photos/400/250?random=112","https://picsum.photos/400/250?random=122"]
+  },
+  {
+    id:3,
+    title:"Apartment in Chittagong",
+    price:"70L", priceValue:70,
+    location:"Chittagong",
+    description:"A well-designed apartment situated in the port city. Includes bright bedrooms, modular kitchen, large balconies with scenic views and easy access to the commercial hub. Best suited for both families and professionals.",
+    imgs:["https://picsum.photos/400/250?random=103","https://picsum.photos/400/250?random=113","https://picsum.photos/400/250?random=123"]
+  },
+  {
+    id:4,
+    title:"Commercial Space",
+    price:"1.5Cr", priceValue:150,
+    location:"Dhaka",
+    description:"Spacious commercial property suitable for offices, showrooms or startups. Located in a prime business district with high visibility, ample parking and reliable utility connections.",
+    imgs:["https://picsum.photos/400/250?random=104","https://picsum.photos/400/250?random=114","https://picsum.photos/400/250?random=124"]
+  },
+  {
+    id:5,
+    title:"Sea View Flat",
+    price:"95L", priceValue:95,
+    location:"Cox's Bazar",
+    description:"An exclusive flat facing the world’s longest sea beach. Offers uninterrupted sea view from the balcony, high-quality interiors, modern kitchen and easy access to local resorts. Perfect holiday or retirement home.",
+    imgs:["https://picsum.photos/400/250?random=105","https://picsum.photos/400/250?random=115","https://picsum.photos/400/250?random=125"]
+  },
+  {
+    id:6,
+    title:"Farm House Plot",
+    price:"60L", priceValue:60,
+    location:"Gazipur",
+    description:"Large plot suitable for building a farmhouse or eco-resort. Surrounded by greenery, calm environment and good road connectivity from Dhaka. Ideal for weekend getaway investment.",
+    imgs:["https://picsum.photos/400/250?random=106","https://picsum.photos/400/250?random=116","https://picsum.photos/400/250?random=126"]
+  },
+  {
+    id:7,
+    title:"Luxury Villa",
+    price:"2Cr", priceValue:200,
+    location:"Dhaka",
+    description:"A stunning luxury villa featuring multiple floors, landscaped garden, private garage, smart home system and elegant interiors. Designed for those who want to enjoy comfort with prestige.",
+    imgs:["https://picsum.photos/400/250?random=107","https://picsum.photos/400/250?random=117","https://picsum.photos/400/250?random=127"]
+  },
+  {
+    id:8,
+    title:"Budget Apartment",
+    price:"45L", priceValue:45,
+    location:"Narayanganj",
+    description:"Affordable yet comfortable apartment with practical layout. Offers sufficient sunlight, ventilation and access to local markets, schools and hospitals. Perfect choice for small families or first-time buyers.",
+    imgs:["https://picsum.photos/400/250?random=108","https://picsum.photos/400/250?random=118","https://picsum.photos/400/250?random=128"]
+  },
+  {
+    id:9,
+    title:"Industrial Plot",
+    price:"3Cr", priceValue:300,
+    location:"Savar",
+    description:"Large industrial land located near highway with strong infrastructure support. Suitable for factories, warehouses or logistic hubs. Secure and growing industrial belt with high business potential.",
+    imgs:["https://picsum.photos/400/250?random=109","https://picsum.photos/400/250?random=119","https://picsum.photos/400/250?random=129"]
+  },
+  {
+    id:10,
+    title:"Modern Duplex",
+    price:"1Cr", priceValue:100,
+    location:"Sylhet",
+    description:"A contemporary duplex house with stylish architecture, open kitchen concept, spacious living rooms and private backyard. Located in a peaceful residential area of Sylhet.",
+    imgs:["https://picsum.photos/400/250?random=110","https://picsum.photos/400/250?random=120","https://picsum.photos/400/250?random=130"]
+  }
+];
+
+
+    const el=id=>document.querySelector(id);
+
+    function render(data){
+      el('#projects').innerHTML = data.map(p => `
+        <div class="card" onclick="location.hash='#/project/${p.id}'">
+          <div class="slider" data-id="${p.id}">
+            <span class="prev" onclick="slide(event, ${p.id}, -1)">&#10094;</span>
+            <img src="${p.imgs[0]}" alt="${p.title}" class="slide-img" data-index="0">
+            <span class="next" onclick="slide(event, ${p.id}, 1)">&#10095;</span>
+          </div>
+          <h3>${p.title}</h3>
+          <p>Price: ${p.price}</p>
+          <p>Location: ${p.location}</p>
+        </div>
+      `).join('');
+    }
+
+    function slide(e, id, direction){
+      e.stopPropagation();
+      const slider = document.querySelector(`.slider[data-id='${id}']`);
+      const img = slider.querySelector('.slide-img');
+      const property = PROPERTIES.find(p => p.id === id);
+      let index = parseInt(img.getAttribute('data-index'));
+      index += direction;
+      if(index < 0) index = property.imgs.length - 1;
+      if(index >= property.imgs.length) index = 0;
+      img.src = property.imgs[index];
+      img.setAttribute('data-index', index);
+    }
+
+    function showDetails(id){
+  const p = PROPERTIES.find(x => x.id === id);
+
+  let galleryHTML = p.imgs.map((url) => `
+    <div class="detail-img">
+      <a href="${url}" data-fancybox="gallery-${p.id}" data-caption="${p.title}">
+        <img src="${url}" alt="${p.title}">
+      </a>
+    </div>
+  `).join('');
+
+  el('#details').innerHTML = `
+    <div class="detail-header">
+      <h2>${p.title}</h2>
+      <p><strong>Price:</strong> ${p.price}</p>
+      <p><strong>Location:</strong> ${p.location}</p>
+      <p>${p.description || "No description available."}</p>
+    </div>
+    <div class="detail-gallery">${galleryHTML}</div>
+    <div class="detail-footer">
+      <p><a href="https://wa.me/8801972419224" target="_blank">WhatsApp Now</a></p>
+      <p>Contact for more information</p>
+    </div>
+  `;
+
+  el('#details').classList.add('active');
+  el('#projects').style.display='none';
+  el('#about').style.display='none';
+}
+
+
+    function applyFilters(){
+      let q=el('#search').value.toLowerCase();
+      let loc=el('#location').value;
+      let price=el('#price').value;
+
+      let f=PROPERTIES.filter(p=>
+        p.title.toLowerCase().includes(q) &&
+        (loc===''||p.location===loc) &&
+        (price==='' ||
+ (price==='low' && p.priceValue < 50) ||
+ (price==='mid' && p.priceValue >= 50 && p.priceValue <= 100) ||
+ (price==='high' && p.priceValue > 100))
+      );
+      render(f);
+    }
+
+    function fillLocation(){
+      let locs=[...new Set(PROPERTIES.map(p=>p.location))];
+      el('#location').innerHTML=`<option value="">All Locations</option>`+locs.map(l=>`<option>${l}</option>`).join('');
+    }
+
+    function route(){
+      if(location.hash.startsWith('#/project/')){
+        showDetails(parseInt(location.hash.split('/')[2]));
+      } else if(location.hash==='#about'){
+        el('#about').style.display='block';
+        el('#projects').style.display='none';
+        el('#details').classList.remove('active');
+      } else if(location.hash==='#home' || location.hash==='' || location.hash==='#'){
+        render(PROPERTIES);
+        el('#projects').style.display='grid';
+        el('#about').style.display='none';
+        el('#details').classList.remove('active');
+      }
+    }
+
+    el('#apply').addEventListener('click',applyFilters);
+    window.addEventListener('hashchange',route);
+
+    fillLocation(); render(PROPERTIES); route();
+    el('#year').textContent=new Date().getFullYear();
+
+    // Toggle Search Bar
+el('#toggle-search').addEventListener('click', () => {
+  el('.search-bar').classList.toggle('active');
+});
+
+
+
+
+  </script>
+  <!-- Fancybox JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+</body>
+</html>
